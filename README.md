@@ -74,11 +74,21 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 | `KRAWL_DASHBOARD_PASSWORD` | Passwort für geschützte Panels. Nur setzen, wenn ein festes Passwort gewünscht ist. Nicht setzen = Krawl generiert eines (steht in den Container-Logs). Nicht leer mitgeben! | `mein-geheimes-passwort` |
 | `KRAWL_DELAY` | Antwortverzögerung in ms (Standard 100) | `100` |
 | `KRAWL_CANARY_TOKEN_URL` | Canary-Token-URL (optional) | `http://your-canary-token-url` |
+| `KRAWL_CUSTOM_TEMPLATE_PATH` | Pfad **im Container** zu einer eigenen HTML-Fake-Seite. Leer lassen = Standard-Seite. Template muss `{counter}` und `{content}` enthalten. | `/templates/custom_page.html` |
 | `KRAWL_LOG_LEVEL` | Log-Level | `INFO` |
 | `PORT` | Host-Port (Container-Port ist 5000) | `5000` |
 | `TZ` | Zeitzone | `Europe/Berlin` |
 
 Falls du eine `.env`-Datei nutzen möchtest: Kopiere `.env.example` und fülle die Werte aus.
+
+### 🎨 Eigene Fake-Seite (Custom Template)
+
+1. Lege auf dem Docker-Host einen Ordner an, z. B. `./templates` (bzw. im Portainer-Stacks-Ordner), mit deiner `custom_page.html`. Das Template muss die Platzhalter `{counter}` und `{content}` enthalten.
+2. Aktiviere den Volume-Mount in `docker-compose.yml` (auskommentiert hinter `volumes:`):
+   ```yaml
+   - ${KRAWL_TEMPLATES_HOST_DIR:-./templates}:/templates:ro
+   ```
+3. Setze die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container, z. B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
 
 ---
 

@@ -16,12 +16,20 @@ services:
       - "${PORT:-5000}:5000"
     volumes:
       - krawl_data:/app/data
+      # Eigene Fake-Seite als Template nutzen (optional):
+      # Host-Ordner mit deiner custom_page.html in den Container mounten ...
+      # - ${KRAWL_TEMPLATES_HOST_DIR:-./templates}:/templates:ro
+      # ... und dann den Pfad im Container aktivieren:
+      # (KRAWL_CUSTOM_TEMPLATE_PATH=/templates/custom_page.html)
 
     environment:
       # Geheimer Dashboard-Pfad (muss mit / beginnen)
       - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH:-/home/KRAWL}
       - KRAWL_DELAY=${KRAWL_DELAY:-100}
       - KRAWL_CANARY_TOKEN_URL=${KRAWL_CANARY_TOKEN_URL:-}
+      # Pfad im Container zu einer eigenen HTML-Fake-Seite. Muss {counter} und {content} enthalten.
+      # Leer lassen = Standard-Seite. Nur aktiv, wenn der Ordner per Volume gemountet ist.
+      - KRAWL_CUSTOM_TEMPLATE_PATH=${KRAWL_CUSTOM_TEMPLATE_PATH:-}
       - KRAWL_LOG_LEVEL=${KRAWL_LOG_LEVEL:-INFO}
       - TZ=${TZ:-Europe/Berlin}
     restart: unless-stopped
