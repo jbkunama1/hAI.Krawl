@@ -6,7 +6,7 @@
 [![GitHub Forks](https://img.shields.io/github/forks/jbkunama1/hAI.Krawl?style=flat-square&logo=github)](https://github.com/jbkunama1/hAI.Krawl/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/jbkunama1/hAI.Krawl?style=flat-square)](https://github.com/jbkunama1/hAI.Krawl/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker)](docker-compose.portainer.yml)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker)](docker-compose.yml)
 [![Upstream](https://img.shields.io/badge/Upstream-BlessedRebuS%2FKrawl-orange?style=flat-square&logo=github)](https://github.com/BlessedRebuS/Krawl)
 
 > **Portainer Stack** für [Krawl](https://github.com/BlessedRebuS/Krawl) – Honeypot-Deception-Server als einzelner Docker-Container. Deploy direkt aus GitHub in Portainer, kein manuelles Clonen nötig.
@@ -39,7 +39,7 @@ Läuft im **Standalone-Modus** (SQLite + In-Memory-Cache) – ein einzelner Cont
 3. Build method: **Repository**
 4. Repository URL: `https://github.com/jbkunama1/hAI.Krawl`
 5. Repository reference: `refs/heads/main`
-6. Compose path: `docker-compose.portainer.yml`
+6. Compose path: `docker-compose.yml`
 7. **Environment variables** setzen (siehe unten)
 8. **Deploy the stack**
 
@@ -84,9 +84,9 @@ Falls du eine `.env`-Datei nutzen möchtest: Kopiere `.env.example` und fülle d
 
 ```
 hAI.Krawl/
-├── docker-compose.portainer.yml  ← Portainer Stack (baut Image aus Upstream-Repo)
-├── docker-compose.ghcr.yml       ← Portainer Stack (holt vorgebauten GHCR-Image)
-├── .env.example                  ← Vorlage für Umgebungsvariablen
+├── docker-compose.yml        ← Portainer Stack (baut Image aus Upstream-Repo)
+├── docker-compose.ghcr.yml   ← Portainer Stack (holt vorgebauten GHCR-Image)
+├── .env.example              ← Vorlage für Umgebungsvariablen
 ├── .github/workflows/
 │   ├── docker-build.yml          ← baut & pusht Image auf ghcr.io (bei Push/Commit)
 │   ├── docker-build-daily.yml    ← täglicher Upstream-Check; baut neu bei neuem Upstream-Commit
