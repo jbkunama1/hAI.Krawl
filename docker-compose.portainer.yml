@@ -19,7 +19,6 @@ services:
 
     environment:
       - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH:-/dashboard}
-      - KRAWL_DASHBOARD_PASSWORD=${KRAWL_DASHBOARD_PASSWORD:-}
       - KRAWL_LOG_LEVEL=${KRAWL_LOG_LEVEL:-INFO}
       - TZ=${TZ:-Europe/Berlin}
     restart: unless-stopped
