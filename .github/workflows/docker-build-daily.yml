@@ -4,7 +4,7 @@
 # neuen Commit hat. Ist das Image für diesen Commit noch nicht auf
 # ghcr.io gebaut (Tag "upstream-<sha>"), wird neu gebaut & gepusht.
 # Die Registry selbst ist der "letzte gebaute Stand" (Tag-Existenz).
-# Der Host-Build (docker-compose.portainer.yml) bleibt unverändert.
+# Der Host-Build (docker-compose.yml) bleibt unverändert.
 # ============================================================
 
 name: Build & Push Docker Image to GHCR (Daily Upstream Check)
