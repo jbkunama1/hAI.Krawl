@@ -3,7 +3,7 @@
 # Baut das Krawl-Image aus dem Upstream-Repo und
 # pusht es auf ghcr.io. Läuft bei jedem Push (Commit) auf
 # beliebige Branch, manuell per workflow_dispatch ausführbar.
-# Der Host-Build (docker-compose.portainer.yml) bleibt unverändert.
+# Der Host-Build (docker-compose.yml) bleibt unverändert.
 # ============================================================
 
 name: Build & Push Docker Image to GHCR
