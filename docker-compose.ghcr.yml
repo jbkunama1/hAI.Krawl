@@ -18,8 +18,8 @@ services:
       - krawl_data:/app/data
       # Eigene Fake-Seite als Template nutzen (optional):
       # Beispiel-Template liegt im Repo unter templates/custom_page.html.
-      # Auf dem Host einen Ordner anlegen, Template hineinkopieren und mounten:
-      # - ${KRAWL_TEMPLATES_HOST_DIR:-./templates}:/templates:ro
+      # Host-Ordner mit deiner custom_page.html mounten (Standard: /templates):
+      - ${KRAWL_TEMPLATES_HOST_DIR:-/templates}:/templates:ro
       # Dann den Pfad im Container aktivieren:
       # (KRAWL_CUSTOM_TEMPLATE_PATH=/templates/custom_page.html)
 

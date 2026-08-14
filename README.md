@@ -85,12 +85,11 @@ Falls du eine `.env`-Datei nutzen möchtest: Kopiere `.env.example` und fülle d
 
 Ein Beispiel-Template liegt im Repo unter [`templates/custom_page.html`](templates/custom_page.html) (sieht aus wie eine nginx-Standardseite). So aktivierst du es:
 
-1. Auf dem Docker-Host einen Ordner anlegen (z.B. `./templates` bzw. im Portainer-Stacks-Ordner) und `custom_page.html` aus dem Repo hineinkopieren. Das Template muss die Platzhalter `{counter}` und `{content}` enthalten.
-2. Den Volume-Mount in `docker-compose.yml` aktivieren (auskommentiert hinter `volumes:`):
+1. Auf dem Docker-Host einen Ordner `templates` anlegen (bzw. den Default `/templates` nutzen) und `custom_page.html` aus dem Repo hineinkopieren. Das Template muss die Platzhalter `{counter}` und `{content}` enthalten. Der Mount ist in der Compose bereits aktiv:
    ```yaml
-   - ${KRAWL_TEMPLATES_HOST_DIR:-./templates}:/templates:ro
+   - ${KRAWL_TEMPLATES_HOST_DIR:-/templates}:/templates:ro
    ```
-3. Die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container setzen, z.B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
+2. Die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container setzen, z.B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
 
 ---
 
