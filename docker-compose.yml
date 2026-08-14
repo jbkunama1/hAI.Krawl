@@ -18,12 +18,15 @@ services:
       - krawl_data:/app/data
 
     environment:
-      - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH:-/dashboard}
+      # Geheimer Dashboard-Pfad (zufälliger Default, damit das Dashboard nicht erratbar ist)
+      - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH:-/krawl-eor2msk84z6b}
+      - KRAWL_DELAY=${KRAWL_DELAY:-100}
+      - KRAWL_CANARY_TOKEN_URL=${KRAWL_CANARY_TOKEN_URL:-}
       - KRAWL_LOG_LEVEL=${KRAWL_LOG_LEVEL:-INFO}
       - TZ=${TZ:-Europe/Berlin}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000${KRAWL_DASHBOARD_SECRET_PATH:-/dashboard}', timeout=8)"]
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000${KRAWL_DASHBOARD_SECRET_PATH:-/krawl-eor2msk84z6b}', timeout=8)"]
       interval: 60s
       timeout: 10s
       start_period: 60s

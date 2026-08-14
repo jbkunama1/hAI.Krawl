@@ -70,8 +70,10 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 
 | Variable | Beschreibung | Beispiel |
 |---|---|---|
-| `KRAWL_DASHBOARD_SECRET_PATH` | Dashboard-Pfad (muss mit `/` beginnen) | `/dashboard` |
+| `KRAWL_DASHBOARD_SECRET_PATH` | Dashboard-Pfad (muss mit `/` beginnen). **Zufälligen Wert setzen**, damit das Dashboard nicht erratbar ist. Default: `/krawl-eor2msk84z6b` | `/krawl-eor2msk84z6b` |
 | `KRAWL_DASHBOARD_PASSWORD` | Passwort für geschützte Panels. Nur setzen, wenn ein festes Passwort gewünscht ist. Nicht setzen = Krawl generiert eines (steht in den Container-Logs). Nicht leer mitgeben! | `mein-geheimes-passwort` |
+| `KRAWL_DELAY` | Antwortverzögerung in ms (Standard 100) | `100` |
+| `KRAWL_CANARY_TOKEN_URL` | Canary-Token-URL (optional) | `http://your-canary-token-url` |
 | `KRAWL_LOG_LEVEL` | Log-Level | `INFO` |
 | `PORT` | Host-Port (Container-Port ist 5000) | `5000` |
 | `TZ` | Zeitzone | `Europe/Berlin` |
