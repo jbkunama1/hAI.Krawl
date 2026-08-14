@@ -83,12 +83,14 @@ Falls du eine `.env`-Datei nutzen möchtest: Kopiere `.env.example` und fülle d
 
 ### 🎨 Eigene Fake-Seite (Custom Template)
 
-1. Lege auf dem Docker-Host einen Ordner an, z. B. `./templates` (bzw. im Portainer-Stacks-Ordner), mit deiner `custom_page.html`. Das Template muss die Platzhalter `{counter}` und `{content}` enthalten.
-2. Aktiviere den Volume-Mount in `docker-compose.yml` (auskommentiert hinter `volumes:`):
+Ein Beispiel-Template liegt im Repo unter [`templates/custom_page.html`](templates/custom_page.html) (sieht aus wie eine nginx-Standardseite). So aktivierst du es:
+
+1. Auf dem Docker-Host einen Ordner anlegen (z.B. `./templates` bzw. im Portainer-Stacks-Ordner) und `custom_page.html` aus dem Repo hineinkopieren. Das Template muss die Platzhalter `{counter}` und `{content}` enthalten.
+2. Den Volume-Mount in `docker-compose.yml` aktivieren (auskommentiert hinter `volumes:`):
    ```yaml
    - ${KRAWL_TEMPLATES_HOST_DIR:-./templates}:/templates:ro
    ```
-3. Setze die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container, z. B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
+3. Die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container setzen, z.B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
 
 ---
 
@@ -99,6 +101,8 @@ hAI.Krawl/
 ├── docker-compose.yml        ← Portainer Stack (baut Image aus Upstream-Repo)
 ├── docker-compose.ghcr.yml   ← Portainer Stack (holt vorgebauten GHCR-Image)
 ├── .env.example              ← Vorlage für Umgebungsvariablen
+├── templates/
+│   └── custom_page.html      ← Beispiel-Fake-Seite (nginx-Stil)
 ├── .github/workflows/
 │   ├── docker-build.yml          ← baut & pusht Image auf ghcr.io (bei Push/Commit)
 │   ├── docker-build-daily.yml    ← täglicher Upstream-Check; baut neu bei neuem Upstream-Commit
