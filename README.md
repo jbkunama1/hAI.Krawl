@@ -75,6 +75,15 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 | `KRAWL_DELAY` | Antwortverzögerung in ms (Standard 100) | `100` |
 | `KRAWL_CANARY_TOKEN_URL` | Canary-Token-URL (optional) | `http://your-canary-token-url` |
 | `KRAWL_CUSTOM_TEMPLATE_PATH` | Pfad **im Container** zu einer eigenen HTML-Fake-Seite. Leer lassen = Standard-Seite. Template muss `{counter}` und `{content}` enthalten. | `/templates/custom_page.html` |
+| `KRAWL_AI_ENABLED` | KI-generierte Fake-Seiten aktivieren (`true`/`false`). Default: `false` | `true` |
+| `KRAWL_AI_PROVIDER` | KI-Provider: `openrouter` oder `openai`. Default: `openrouter` | `openrouter` |
+| `KRAWL_AI_OPENAI_BASE_URL` | Basis-URL für Provider `openai`. Nur relevant für eigene/self-hosted Endpoints (z.B. Ollama/llama.cpp) | `http://krawl-llm:8080/v1` |
+| `KRAWL_AI_API_KEY` | API-Key für OpenRouter oder OpenAI | `sk-...` |
+| `KRAWL_AI_MODEL` | KI-Modell. Free-Modelle bei OpenRouter möglich | `nvidia/nemotron-3-super-120b-a12b:free` |
+| `KRAWL_AI_TIMEOUT` | Timeout für API-Aufrufe in Sekunden. Default: `300` | `300` |
+| `KRAWL_AI_MAX_DAILY_REQUESTS` | Max. KI-Aufrufe pro Tag (Kostenbremse). `0` = unbegrenzt. Default: `100` | `100` |
+| `KRAWL_AI_REASONING_ENABLED` | Reasoning für OpenRouter-Modelle aktivieren. Default: `false` | `false` |
+| `KRAWL_AI_REASONING_EFFORT` | Reasoning-Stufe: `none`, `minimal`, `low`, `medium`, `high`, `xhigh` | `medium` |
 | `KRAWL_LOG_LEVEL` | Log-Level | `INFO` |
 | `PORT` | Host-Port (Container-Port ist 5000) | `5000` |
 | `TZ` | Zeitzone | `Europe/Berlin` |
@@ -90,6 +99,54 @@ Ein Beispiel-Template liegt im Repo unter [`templates/custom_page.html`](templat
    - ${KRAWL_TEMPLATES_HOST_DIR:-/templates}:/templates:ro
    ```
 2. Die Env-Variable `KRAWL_CUSTOM_TEMPLATE_PATH` auf den Pfad im Container setzen, z.B. `/templates/custom_page.html`. Leer lassen = Standard-Seite.
+
+---
+
+## 🤖 KI-generierte Fake-Seiten (AI-Generated Deception Pages)
+
+Krawl kann auf **unbekannte Pfade** per LLM realistische Fake-Seiten erzeugen (statt nur statische Templates zu liefern). Generierte Seiten werden in der SQLite-DB gecacht (Dashboard → Tab **Deception**) und gegen das tägliche Limit gezählt. Das Feature ist **standardmäßig aus** – so aktivierst du es:
+
+### Option 1: OpenRouter (einfach, kostenlose Modelle)
+
+1. Kostenloses Konto auf [openrouter.ai](https://openrouter.ai) anlegen und API-Key erstellen.
+2. Stack-Variablen setzen:
+
+```
+KRAWL_AI_ENABLED=true
+KRAWL_AI_PROVIDER=openrouter
+KRAWL_AI_API_KEY=<dein-OpenRouter-Key>
+KRAWL_AI_MODEL=nvidia/nemotron-3-super-120b-a12b:free   # free = kein Guthaben nötig
+KRAWL_AI_MAX_DAILY_REQUESTS=100                          # Kostenbremse, z.B. 5–10
+```
+
+> Die Vars `OPENROUTER_API_KEY` und `OPENROUTER_MODEL` werden ebenfalls direkt unterstützt und haben Vorrang.
+
+### Option 2: Self-hosted LLM (Ollama / llama.cpp, OpenAI-kompatibel)
+
+Eigenen LLM-Container betreiben (z.B. im selben Netz `highfishNetwork`) und den OpenAI-kompatiblen Endpoint angeben:
+
+```
+KRAWL_AI_ENABLED=true
+KRAWL_AI_PROVIDER=openai
+KRAWL_AI_OPENAI_BASE_URL=http://krawl-llm:8080/v1
+KRAWL_AI_API_KEY=<key-des-LLM>      # manche self-hosted Server ignorieren den Key
+KRAWL_AI_MODEL=<dein-modell>
+```
+
+### Option 3: OpenAI API
+
+```
+KRAWL_AI_ENABLED=true
+KRAWL_AI_PROVIDER=openai
+KRAWL_AI_API_KEY=<openai-key>
+KRAWL_AI_MODEL=gpt-5.1-mini
+```
+
+**Hinweise**
+
+- `KRAWL_AI_MAX_DAILY_REQUESTS` ist die Kostenbremse. `0` = unbegrenzt. Die offiziellen Kosten liegen bei ~$0.001/Seite (OpenRouter, Standard-Modelle) – mit Free-Modellen oder self-hosted entstehen keine Kosten.
+- `KRAWL_AI_REASONING_ENABLED=true` funktioniert nur mit OpenRouter-Modellen, die Reasoning unterstützen.
+- Alle Variablen sind optional – einfach weglassen oder leer lassen, dann gelten die (passenden) Defaults aus dem Image.
 
 ---
 

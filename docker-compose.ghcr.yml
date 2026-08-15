@@ -31,6 +31,18 @@ services:
       # Pfad im Container zu einer eigenen HTML-Fake-Seite. Muss {counter} und {content} enthalten.
       # Leer lassen = Standard-Seite. Nur aktiv, wenn der Ordner per Volume gemountet ist.
       - KRAWL_CUSTOM_TEMPLATE_PATH=${KRAWL_CUSTOM_TEMPLATE_PATH:-}
+      # KI-generierte Fake-Seiten (AI-Generated Deception Pages), optional.
+      # Standard: ausgeschaltet. Aktivieren = KRAWL_AI_ENABLED=true + API-Key.
+      # Defaults entsprechen dem gebackenen Upstream config.yaml.
+      - KRAWL_AI_ENABLED=${KRAWL_AI_ENABLED:-false}
+      - KRAWL_AI_PROVIDER=${KRAWL_AI_PROVIDER:-openrouter}          # "openrouter" oder "openai"
+      - KRAWL_AI_OPENAI_BASE_URL=${KRAWL_AI_OPENAI_BASE_URL:-https://api.openai.com/v1}  # nur relevant für provider "openai" (z.B. self-hosted http://krawl-llm:8080/v1)
+      - KRAWL_AI_API_KEY=${KRAWL_AI_API_KEY:-}
+      - KRAWL_AI_MODEL=${KRAWL_AI_MODEL:-nvidia/nemotron-3-super-120b-a12b:free}
+      - KRAWL_AI_TIMEOUT=${KRAWL_AI_TIMEOUT:-300}
+      - KRAWL_AI_MAX_DAILY_REQUESTS=${KRAWL_AI_MAX_DAILY_REQUESTS:-100}   # 0 = unbegrenzt
+      - KRAWL_AI_REASONING_ENABLED=${KRAWL_AI_REASONING_ENABLED:-false}   # nur für OpenRouter-Modelle mit Reasoning
+      - KRAWL_AI_REASONING_EFFORT=${KRAWL_AI_REASONING_EFFORT:-medium}    # none, minimal, low, medium, high, xhigh
       - KRAWL_LOG_LEVEL=${KRAWL_LOG_LEVEL:-INFO}
       - TZ=${TZ:-Europe/Berlin}
     restart: unless-stopped
