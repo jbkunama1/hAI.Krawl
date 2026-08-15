@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="hAI.Krawl – Portainer Stack für Krawl, den Honeypot-Deception-Server. Erkennt und analysiert Angreifer, Web-Crawler und Scanner. Einzelner Docker-Container aus GHCR.">
+  <title>hAI.Krawl – Honeypot-Deception-Server als Portainer Stack</title>
+  <style>
+    :root{
+      --accent:#00e5a0; --bg:#080c10; --card:rgba(255,255,255,.04); --border:rgba(255,255,255,.09);
+      --text:#e9edf2; --muted:#8b95a3; --red:#ff4d5e;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:
+      radial-gradient(1200px 600px at 80% -10%,rgba(0,229,160,.12),transparent 60%),
+      radial-gradient(1000px 500px at -10% 110%,rgba(255,77,94,.08),transparent 60%),
+      var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1040px;margin:0 auto;padding:56px 24px 80px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:56px}
+    header .logo{font-size:1.4rem;font-weight:700;letter-spacing:.5px}
+    header nav{margin-left:auto;display:flex;gap:22px;font-size:.92rem}
+    header nav a{color:var(--muted)}
+    header nav a:hover{color:var(--text)}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;margin-bottom:64px}
+    .hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:18px}
+    .hero h1 span{color:var(--accent)}
+    .hero p.lead{color:var(--muted);font-size:1.1rem;margin-bottom:28px;max-width:46ch}
+    .cta{display:flex;gap:14px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;font-size:.95rem;transition:transform .15s,box-shadow .2s}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--accent);color:#080c10}
+    .btn-primary:hover{box-shadow:0 8px 24px rgba(0,229,160,.35)}
+    .btn-ghost{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    .demo-frame{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);
+      box-shadow:0 24px 60px rgba(0,0,0,.5);background:#000;aspect-ratio:16/9;display:flex;
+      align-items:center;justify-content:center;flex-direction:column;gap:10px}
+    .demo-frame .term{font-family:'Cascadia Code',Consolas,monospace;font-size:.72rem;color:var(--accent);
+      background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);padding:6px 14px;border-radius:8px}
+    .demo-frame .term.red{color:var(--red);background:rgba(255,77,94,.08);border-color:rgba(255,77,94,.25)}
+    .demo-tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);
+      background:rgba(255,77,94,.92);color:#fff;font-size:.7rem;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;pointer-events:none}
+    .pill{display:inline-block;background:rgba(0,229,160,.15);color:var(--accent);
+      border:1px solid rgba(0,229,160,.35);font-size:.78rem;font-weight:600;
+      padding:5px 14px;border-radius:20px;margin-bottom:22px;letter-spacing:1px;text-transform:uppercase}
+    section{margin-bottom:72px}
+    h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:12px;letter-spacing:-.5px}
+    .sub{color:var(--muted);margin-bottom:32px;max-width:62ch}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+    .card .icon{font-size:1.6rem;margin-bottom:10px}
+    .card h3{font-size:1rem;margin-bottom:6px}
+    .card p{color:var(--muted);font-size:.88rem}
+    .install{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:start}
+    pre{background:#0d1117;border:1px solid var(--border);border-radius:12px;padding:18px;
+      font-family:'Cascadia Code',Consolas,monospace;font-size:.82rem;color:#c9d1d9;overflow-x:auto;margin-top:8px}
+    pre code{white-space:pre}
+    .step{display:flex;gap:14px;margin-bottom:20px}
+    .step b{flex:0 0 22px;height:22px;width:22px;line-height:22px;text-align:center;border-radius:50%;
+      background:var(--accent);color:#080c10;font-size:.8rem}
+    .step p{color:var(--muted);font-size:.92rem}
+    table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
+    th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border)}
+    th{color:var(--accent);font-weight:600;white-space:nowrap}
+    td{color:var(--muted)}
+    td code{color:var(--text);background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;font-size:.78rem}
+    footer{border-top:1px solid var(--border);margin-top:24px;padding-top:24px;
+      color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    @media(max-width:820px){.hero{grid-template-columns:1fr}.install{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">🕸️ hAI.Krawl</div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#portainer">Portainer</a>
+      <a href="#env">Env</a>
+      <a href="#ai">AI-Pages</a>
+      <a href="https://github.com/jbkunama1/hAI.Krawl" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <span class="pill">Honeypot · Deception Server · Portainer Stack</span>
+      <h1>Fang und analysiere Angreifer – mit einem <span>einzigen</span> Container</h1>
+      <p class="lead">hAI.Krawl deployt <a href="https://github.com/BlessedRebuS/Krawl" target="_blank" rel="noopener">Krawl</a> als fertigen Portainer Stack. Das Image wird per GitHub Actions nach GHCR gebaut – Portainer pullt nur noch das fertige Image.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#portainer">🚀 Deployen</a>
+        <a class="btn btn-ghost" href="https://github.com/jbkunama1/hAI.Krawl" target="_blank" rel="noopener">GitHub Repo →</a>
+      </div>
+    </div>
+    <div class="demo-frame">
+      <span class="demo-tag">Deception</span>
+      <div class="term">$ scanner → /wp-admin</div>
+      <div class="term">→ 200 · Fake-Admin-Login · delay 500ms</div>
+      <div class="term red">⚠ Angreifer identifiziert &amp; geloggt</div>
+    </div>
+  </div>
+
+  <section id="features">
+    <h2>Was Krawl kann</h2>
+    <p class="sub">Krawl erkennt bösartige Angreifer, Web-Crawler und automatisierte Scanner, verlangsamt sie und analysiert ihr Verhalten – mit realistischen Fake-Webanwendungen als Köder.</p>
+    <div class="grid">
+      <div class="card"><div class="icon">🕵️</div><h3>Deception Server</h3><p>Realistische Fake-Webapps mit verlockenden Zielen: Admin-Panels, Config-Dateien, Fake-Zugangsdaten.</p></div>
+      <div class="card"><div class="icon">🤖</div><h3>KI-Fake-Seiten</h3><p>Unbekannte Pfade werden per LLM mit realistischen Seiten beantwortet – gecacht in der SQLite-DB.</p></div>
+      <div class="card"><div class="icon">🐢</div><h3>Scanner verlangsamen</h3><p>Konfigurierbare Antwortverzögerung (KRAWL_DELAY) nervt und bremst automatisierte Angreifer aus.</p></div>
+      <div class="card"><div class="icon">📊</div><h3>Dashboard</h3><p>Geschütztes Dashboard mit Analyse von Angreifern und generierten Deception-Seiten.</p></div>
+      <div class="card"><div class="icon">⚙️</div><h3>Single Container</h3><p>Standalone-Modus (SQLite + In-Memory-Cache) – keine externen Dienste nötig.</p></div>
+      <div class="card"><div class="icon">🔁</div><h3>Auto-Updates</h3><p>Täglicher Upstream-Check baut neue Krawl-Versionen automatisch und pusht sie nach GHCR.</p></div>
+    </div>
+  </section>
+
+  <section id="portainer">
+    <h2>Deploy mit Portainer</h2>
+    <p class="sub">Git-Deployment: GitHub Actions baut das Image bei jedem Push auf <code>main</code> und pusht es auf <code>ghcr.io/jbkunama1/hai.krawl</code> (multi-arch <code>linux/amd64</code> + <code>linux/arm64</code>). Manuell anstoßbar unter Actions → „Build &amp; Push Docker Image to GHCR“ → Run workflow.</p>
+    <div class="install">
+      <div>
+        <div class="step"><b>1</b><p>In Portainer → <b>Stacks</b> → <b>+ Add stack</b> öffnen.</p></div>
+        <div class="step"><b>2</b><p>Name: <code>krawl</code> · Build method: <b>Repository</b>.</p></div>
+        <div class="step"><b>3</b><p>Repository URL: <code>https://github.com/jbkunama1/hAI.Krawl</code> · Reference: <code>refs/heads/main</code>.</p></div>
+        <div class="step"><b>4</b><p>Compose path: <code>docker-compose.yml</code>.</p></div>
+        <div class="step"><b>5</b><p>Environment-Variablen setzen (siehe Tabelle unten).</p></div>
+        <div class="step"><b>6</b><p><b>Deploy the stack</b> – Portainer pullt das vorgebaute Image (<code>pull_policy: always</code>), kein Build auf dem Host.</p></div>
+      </div>
+      <div>
+        <p style="color:var(--muted);font-size:.9rem;margin-bottom:10px"><b style="color:var(--text)">Voraussetzungen</b></p>
+        <div class="card" style="margin-bottom:12px"><p>✅ Portainer CE/Business ≥ 2.x</p></div>
+        <div class="card" style="margin-bottom:12px"><p>🌐 Internet-Zugriff vom Docker-Host</p></div>
+        <div class="card"><p>🔓 Einmalig: GHCR-Paket <code>hai.krawl</code> auf <b>public</b> setzen (Repo → Packages → Change visibility), sonst braucht Portainer Login-Credentials.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="env">
+    <h2>Environment Variables</h2>
+    <p class="sub">Wichtige Variablen für deinen Stack – die komplette Liste steht in der README. Eine Vorlage liegt als <code>.env.example</code> im Repo.</p>
+    <table>
+      <thead><tr><th>Variable</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td><code>KRAWL_DASHBOARD_SECRET_PATH</code></td><td>Dashboard-Pfad (muss mit <code>/</code> beginnen). Zufälligen Wert setzen! Default: <code>/home/KRAWL</code></td></tr>
+        <tr><td><code>KRAWL_DASHBOARD_PASSWORD</code></td><td>Festes Passwort für geschützte Panels – sonst generiert Krawl eines (steht in den Container-Logs).</td></tr>
+        <tr><td><code>KRAWL_DELAY</code></td><td>Antwortverzögerung in ms (z.B. <code>500</code>), bremst Scanner aus.</td></tr>
+        <tr><td><code>KRAWL_CUSTOM_TEMPLATE_PATH</code></td><td>Pfad im Container zu einer eigenen HTML-Fake-Seite (Template mit <code>{counter}</code> + <code>{content}</code>).</td></tr>
+        <tr><td><code>KRAWL_AI_ENABLED</code></td><td>KI-Fake-Seiten aktivieren (<code>true</code>/<code>false</code>). Default: <code>false</code></td></tr>
+        <tr><td><code>KRAWL_AI_PROVIDER</code></td><td><code>openrouter</code> oder <code>openai</code> (für OpenAI-kompatible Endpoints wie 9router).</td></tr>
+        <tr><td><code>KRAWL_AI_OPENAI_BASE_URL</code></td><td>Basis-URL für Provider <code>openai</code> (self-hosted / 9router).</td></tr>
+        <tr><td><code>KRAWL_AI_MODEL</code></td><td>KI-Modell, z.B. <code>free</code> bei 9router.</td></tr>
+        <tr><td><code>KRAWL_AI_MAX_DAILY_REQUESTS</code></td><td>Kostenbremse pro Tag (<code>0</code> = unbegrenzt). Default: <code>100</code></td></tr>
+        <tr><td><code>PORT</code></td><td>Host-Port (Container-Port ist 5000).</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="ai">
+    <h2>KI-generierte Deception-Pages</h2>
+    <p class="sub">Krawl beantwortet unbekannte Pfade per LLM mit realistischen Fake-Seiten statt statischer Templates. Generierte Seiten werden in der SQLite-DB gecacht (Dashboard → Tab <b>Deception</b>).</p>
+    <div class="grid">
+      <div class="card"><div class="icon">🔌</div><h3>9router (empfohlen)</h3><p><code>KRAWL_AI_ENABLED=true</code> · <code>KRAWL_AI_PROVIDER=openai</code> · <code>KRAWL_AI_OPENAI_BASE_URL=https://9router.arbeitermili.eu/v1</code> · <code>KRAWL_AI_MODEL=free</code></p></div>
+      <div class="card"><div class="icon">🌐</div><h3>OpenRouter</h3><p>Kostenloses Konto auf openrouter.ai, Key setzen. Free-Modelle wie <code>nvidia/nemotron-3-super-120b-a12b:free</code> – kein Guthaben nötig.</p></div>
+      <div class="card"><div class="icon">🏠</div><h3>Self-hosted LLM</h3><p>Eigener Ollama/llama.cpp-Container im selben Netz: <code>KRAWL_AI_OPENAI_BASE_URL=http://krawl-llm:8080/v1</code> – keine Kosten.</p></div>
+    </div>
+    <p class="sub" style="margin-top:20px">💰 Kostenbremse: <code>KRAWL_AI_MAX_DAILY_REQUESTS</code>. Offizielle Kosten ~$0.001/Seite – mit Free-Modellen oder self-hosted kostenlos.</p>
+  </section>
+
+  <footer>
+    <span>hAI.Krawl · Portainer Stack für <a href="https://github.com/BlessedRebuS/Krawl" target="_blank" rel="noopener">BlessedRebuS/Krawl</a></span>
+    <span>MIT License · Built by <a href="https://github.com/jbkunama1" target="_blank" rel="noopener">jbkunama1</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
