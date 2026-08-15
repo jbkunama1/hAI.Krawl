@@ -8,6 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker)](docker-compose.yml)
 [![Upstream](https://img.shields.io/badge/Upstream-BlessedRebuS%2FKrawl-orange?style=flat-square&logo=github)](https://github.com/BlessedRebuS/Krawl)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-online-222222?style=flat-square&logo=github-pages)](https://jbkunama1.github.io/hAI.Krawl/)
 
 > **Portainer Stack** für [Krawl](https://github.com/BlessedRebuS/Krawl) – Honeypot-Deception-Server als einzelner Docker-Container. Deploy direkt aus GitHub in Portainer, kein manuelles Clonen nötig.
 
@@ -148,17 +149,27 @@ KRAWL_AI_MODEL=gpt-5.1-mini
 
 ---
 
+## 🌐 GitHub Pages
+
+Eine moderne Landing-Page zu diesem Repo liegt unter [`index.html`](index.html) und wird per Workflow (`.github/workflows/gh-pages.yml`) automatisch auf **GitHub Pages** deployed:
+
+👉 **https://jbkunama1.github.io/hAI.Krawl/**
+
+---
+
 ## 📂 Dateistruktur
 
 ```
 hAI.Krawl/
 ├── docker-compose.yml        ← Portainer Stack (holt vorgebauten GHCR-Image)
 ├── .env.example              ← Vorlage für Umgebungsvariablen
+├── index.html                ← Landing-Page für GitHub Pages
 ├── templates/
 │   └── custom_page.html      ← Beispiel-Fake-Seite (nginx-Stil)
 ├── .github/workflows/
 │   ├── docker-build.yml          ← baut & pusht Image auf ghcr.io (bei Push/Commit)
 │   ├── docker-build-daily.yml    ← täglicher Upstream-Check; baut neu bei neuem Upstream-Commit
+│   ├── gh-pages.yml              ← deployt index.html auf GitHub Pages
 │   └── trufflehog.yml            ← täglicher Secret-Scan
 └── README.md
 ```
