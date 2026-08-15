@@ -1,17 +1,17 @@
 # ============================================================
-# Portainer Stack: Krawl
+# Portainer Stack: Krawl (GHCR-Ausgabe)
+# Holt das von GitHub Actions vorgebaute Image aus ghcr.io.
 # Deploy via: Portainer > Stacks > Add Stack > Repository
 # Repo URL: https://github.com/jbkunama1/hAI.Krawl
 # Compose path: docker-compose.yml
+# Image wird von .github/workflows/docker-build.yml gebaut.
 # ============================================================
 
 services:
   krawl:
-    build:
-      context: https://github.com/BlessedRebuS/Krawl.git
-      dockerfile: Dockerfile
-    image: krawl:latest
+    image: ghcr.io/jbkunama1/hai.krawl:latest
     container_name: hai-krawl
+    pull_policy: always
     ports:
       - "${PORT:-5000}:5000"
     volumes:

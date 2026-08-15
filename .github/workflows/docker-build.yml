@@ -3,7 +3,7 @@
 # Baut das Krawl-Image aus dem Upstream-Repo und
 # pusht es auf ghcr.io. Läuft bei jedem Push (Commit) auf
 # beliebige Branch, manuell per workflow_dispatch ausführbar.
-# Der Host-Build (docker-compose.yml) bleibt unverändert.
+# Der Stack (docker-compose.yml) holt das fertige Image aus ghcr.io.
 # ============================================================
 
 name: Build & Push Docker Image to GHCR
@@ -11,11 +11,16 @@ name: Build & Push Docker Image to GHCR
 on:
   push:
   workflow_dispatch:
+    inputs:
+      upstream_ref:
+        description: 'Upstream ref to build (branch/tag). Default: main'
+        required: false
+        default: 'main'
 
 env:
   REGISTRY: ghcr.io
   UPSTREAM_REPO: BlessedRebuS/Krawl
-  UPSTREAM_REF: main
+  UPSTREAM_REF: ${{ github.event.inputs.upstream_ref || 'main' }}
 
 jobs:
   build-and-push:
