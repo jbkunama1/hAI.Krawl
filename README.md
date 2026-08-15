@@ -77,7 +77,7 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 | `KRAWL_CUSTOM_TEMPLATE_PATH` | Pfad **im Container** zu einer eigenen HTML-Fake-Seite. Leer lassen = Standard-Seite. Template muss `{counter}` und `{content}` enthalten. | `/templates/custom_page.html` |
 | `KRAWL_AI_ENABLED` | KI-generierte Fake-Seiten aktivieren (`true`/`false`). Default: `false` | `true` |
 | `KRAWL_AI_PROVIDER` | KI-Provider: `openrouter` oder `openai`. Default: `openrouter` | `openrouter` |
-| `KRAWL_AI_OPENAI_BASE_URL` | Basis-URL für Provider `openai`. Nur relevant für eigene/self-hosted Endpoints (z.B. Ollama/llama.cpp) | `http://krawl-llm:8080/v1` |
+| `KRAWL_AI_OPENAI_BASE_URL` | Basis-URL für Provider `openai`. Nur relevant für eigene/self-hosted Endpoints (z.B. 9router, Ollama/llama.cpp) | `https://9router.arbeitermili.eu/v1` |
 | `KRAWL_AI_API_KEY` | API-Key für OpenRouter oder OpenAI | `sk-...` |
 | `KRAWL_AI_MODEL` | KI-Modell. Free-Modelle bei OpenRouter möglich | `nvidia/nemotron-3-super-120b-a12b:free` |
 | `KRAWL_AI_TIMEOUT` | Timeout für API-Aufrufe in Sekunden. Default: `300` | `300` |
@@ -121,17 +121,19 @@ KRAWL_AI_MAX_DAILY_REQUESTS=100                          # Kostenbremse, z.B. 5�
 
 > Die Vars `OPENROUTER_API_KEY` und `OPENROUTER_MODEL` werden ebenfalls direkt unterstützt und haben Vorrang.
 
-### Option 2: Self-hosted LLM (Ollama / llama.cpp, OpenAI-kompatibel)
+### Option 2: Self-hosted / eigener LLM (OpenAI-kompatibel)
 
-Eigenen LLM-Container betreiben (z.B. im selben Netz `highfishNetwork`) und den OpenAI-kompatiblen Endpoint angeben:
+Beliebiger OpenAI-kompatibler Endpoint – z.B. ein 9router-Provider oder ein eigener LLM-Container (Ollama / llama.cpp) im selben Netz `highfishNetwork`:
 
 ```
 KRAWL_AI_ENABLED=true
 KRAWL_AI_PROVIDER=openai
-KRAWL_AI_OPENAI_BASE_URL=http://krawl-llm:8080/v1
-KRAWL_AI_API_KEY=<key-des-LLM>      # manche self-hosted Server ignorieren den Key
-KRAWL_AI_MODEL=<dein-modell>
+KRAWL_AI_OPENAI_BASE_URL=https://9router.arbeitermili.eu/v1
+KRAWL_AI_API_KEY=<dein-Key>
+KRAWL_AI_MODEL=free
 ```
+
+Der Endpoint wird zu `{BASE_URL}/chat/completions` aufgerufen. Das Modell heißt beim 9router-Provider `free`.
 
 ### Option 3: OpenAI API
 
