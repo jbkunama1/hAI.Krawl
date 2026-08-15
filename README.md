@@ -29,6 +29,8 @@ Läuft im **Standalone-Modus** (SQLite + In-Memory-Cache) – ein einzelner Cont
 
 Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, bei jedem Push/Commit) und auf `ghcr.io/jbkunama1/hai.krawl` gepusht; ein täglicher Upstream-Check (`docker-build-daily.yml`) baut bei neuen Commits automatisch nach (multi-arch `linux/amd64` + `linux/arm64`).
 
+**Manuell anstoßen:** GitHub → Repo → **Actions** → **Build & Push Docker Image to GHCR** → **Run workflow**. Optional kann dabei ein anderer Upstream-Ref (Branch/Tag) angegeben werden; leer = `main`.
+
 ### Voraussetzungen
 - Portainer Business oder CE ≥ 2.x
 - Zugriff auf das Internet vom Docker-Host aus

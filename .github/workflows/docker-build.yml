@@ -11,11 +11,16 @@ name: Build & Push Docker Image to GHCR
 on:
   push:
   workflow_dispatch:
+    inputs:
+      upstream_ref:
+        description: 'Upstream ref to build (branch/tag). Default: main'
+        required: false
+        default: 'main'
 
 env:
   REGISTRY: ghcr.io
   UPSTREAM_REPO: BlessedRebuS/Krawl
-  UPSTREAM_REF: main
+  UPSTREAM_REF: ${{ github.event.inputs.upstream_ref || 'main' }}
 
 jobs:
   build-and-push:
