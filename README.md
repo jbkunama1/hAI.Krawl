@@ -79,7 +79,7 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 | `KRAWL_AI_PROVIDER` | KI-Provider: `openrouter` oder `openai`. Default: `openrouter` | `openrouter` |
 | `KRAWL_AI_OPENAI_BASE_URL` | Basis-URL für Provider `openai`. Nur relevant für eigene/self-hosted Endpoints (z.B. 9router, Ollama/llama.cpp) | `https://9router.arbeitermili.eu/v1` |
 | `KRAWL_AI_API_KEY` | API-Key für OpenRouter oder OpenAI | `sk-...` |
-| `KRAWL_AI_MODEL` | KI-Modell. Free-Modelle bei OpenRouter möglich | `nvidia/nemotron-3-super-120b-a12b:free` |
+| `KRAWL_AI_MODEL` | KI-Modell (bei 9router: `free`) | `free` |
 | `KRAWL_AI_TIMEOUT` | Timeout für API-Aufrufe in Sekunden. Default: `300` | `300` |
 | `KRAWL_AI_MAX_DAILY_REQUESTS` | Max. KI-Aufrufe pro Tag (Kostenbremse). `0` = unbegrenzt. Default: `100` | `100` |
 | `KRAWL_AI_REASONING_ENABLED` | Reasoning für OpenRouter-Modelle aktivieren. Default: `false` | `false` |
@@ -106,7 +106,22 @@ Ein Beispiel-Template liegt im Repo unter [`templates/custom_page.html`](templat
 
 Krawl kann auf **unbekannte Pfade** per LLM realistische Fake-Seiten erzeugen (statt nur statische Templates zu liefern). Generierte Seiten werden in der SQLite-DB gecacht (Dashboard → Tab **Deception**) und gegen das tägliche Limit gezählt. Das Feature ist **standardmäßig aus** – so aktivierst du es:
 
-### Option 1: OpenRouter (einfach, kostenlose Modelle)
+### Option 1: 9router (OpenAI-kompatibel, in diesem Repo empfohlen)
+
+Dein Provider ist OpenAI-kompatibel – als Stack-Variablen setzen:
+
+```
+KRAWL_AI_ENABLED=true
+KRAWL_AI_PROVIDER=openai
+KRAWL_AI_OPENAI_BASE_URL=https://9router.arbeitermili.eu/v1
+KRAWL_AI_MODEL=free
+KRAWL_AI_API_KEY=<dein-Key>
+KRAWL_AI_MAX_DAILY_REQUESTS=100                          # Kostenbremse, z.B. 5–10
+```
+
+Krawl ruft dann `https://9router.arbeitermili.eu/v1/chat/completions` auf.
+
+### Option 2: OpenRouter (Alternative, kostenlose Modelle)
 
 1. Kostenloses Konto auf [openrouter.ai](https://openrouter.ai) anlegen und API-Key erstellen.
 2. Stack-Variablen setzen:
@@ -121,19 +136,17 @@ KRAWL_AI_MAX_DAILY_REQUESTS=100                          # Kostenbremse, z.B. 5�
 
 > Die Vars `OPENROUTER_API_KEY` und `OPENROUTER_MODEL` werden ebenfalls direkt unterstützt und haben Vorrang.
 
-### Option 2: Self-hosted / eigener LLM (OpenAI-kompatibel)
+### Option 3: Self-hosted / eigener LLM (OpenAI-kompatibel)
 
-Beliebiger OpenAI-kompatibler Endpoint – z.B. ein 9router-Provider oder ein eigener LLM-Container (Ollama / llama.cpp) im selben Netz `highfishNetwork`:
+Eigener LLM-Container (Ollama / llama.cpp) im selben Netz `highfishNetwork`:
 
 ```
 KRAWL_AI_ENABLED=true
 KRAWL_AI_PROVIDER=openai
-KRAWL_AI_OPENAI_BASE_URL=https://9router.arbeitermili.eu/v1
-KRAWL_AI_API_KEY=<dein-Key>
-KRAWL_AI_MODEL=free
+KRAWL_AI_OPENAI_BASE_URL=http://krawl-llm:8080/v1
+KRAWL_AI_API_KEY=<key-des-LLM>      # manche self-hosted Server ignorieren den Key
+KRAWL_AI_MODEL=<dein-modell>
 ```
-
-Der Endpoint wird zu `{BASE_URL}/chat/completions` aufgerufen. Das Modell heißt beim 9router-Provider `free`.
 
 ### Option 3: OpenAI API
 
