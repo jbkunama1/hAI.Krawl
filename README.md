@@ -17,40 +17,21 @@
 
 [Krawl](https://github.com/BlessedRebuS/Krawl) ist ein Cloud-nativer Deception-Server, der bösartige Angreifer, Web-Crawler und automatisierte Scanner erkennt, verlangsamt und analysiert. Er erzeugt realistische Fake-Webanwendungen mit scheinbar verlockenden Zielen (Admin-Panels, Config-Dateien, Fake-Zugangsdaten), um verdächtige Aktivität anzuziehen und zu identifizieren.
 
-Dieses Repo liefert einen fertigen **Portainer Stack** (Git-Deployment) für beide Varianten:
+Dieses Repo liefert einen fertigen **Portainer Stack** (Git-Deployment) für die **GHCR-Variante**:
 
-1. **Host-Build** – baut das Image beim Deploy direkt aus dem Upstream-Repo (Standard).
-2. **GHCR-Image** – ein GitHub Actions Workflow baut das Image bei jedem Push auf `main` und pusht es auf `ghcr.io`; Portainer holt nur noch das fertige Image.
+Ein GitHub Actions Workflow baut das Image bei jedem Push auf `main` aus dem Upstream-Repo [BlessedRebuS/Krawl](https://github.com/BlessedRebuS/Krawl) und pusht es auf `ghcr.io`; Portainer holt nur noch das fertige Image.
 
 Läuft im **Standalone-Modus** (SQLite + In-Memory-Cache) – ein einzelner Container, keine externen Dienste nötig.
 
 ---
 
-## 🚀 Portainer Deploy – Host-Build (Standard, unverändert)
-
-### Voraussetzungen
-- Portainer Business oder CE ≥ 2.x
-- Zugriff auf das Internet vom Docker-Host aus
-
-### Schritte
-
-1. In Portainer → **Stacks** → **+ Add stack**
-2. Name: `krawl`
-3. Build method: **Repository**
-4. Repository URL: `https://github.com/jbkunama1/hAI.Krawl`
-5. Repository reference: `refs/heads/main`
-6. Compose path: `docker-compose.yml`
-7. **Environment variables** setzen (siehe unten)
-8. **Deploy the stack**
-
----
-
-## 📦 Portainer Deploy – GHCR-Image (vorgebaut)
+## 🚀 Portainer Deploy
 
 Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, bei jedem Push/Commit) und auf `ghcr.io/jbkunama1/hai.krawl` gepusht; ein täglicher Upstream-Check (`docker-build-daily.yml`) baut bei neuen Commits automatisch nach (multi-arch `linux/amd64` + `linux/arm64`).
 
 ### Voraussetzungen
 - Portainer Business oder CE ≥ 2.x
+- Zugriff auf das Internet vom Docker-Host aus
 - **Einmalig:** GHCR-Paket als **public** setzen (GitHub → Repo → **Packages** → `hai.krawl` → **Package settings** → **Change visibility** → Public), sonst braucht Portainer Login-Credentials.
 
 ### Schritte
@@ -60,7 +41,7 @@ Das Image wird von GitHub Actions gebaut (`.github/workflows/docker-build.yml`, 
 3. Build method: **Repository**
 4. Repository URL: `https://github.com/jbkunama1/hAI.Krawl`
 5. Repository reference: `refs/heads/main`
-6. Compose path: `docker-compose.ghcr.yml`
+6. Compose path: `docker-compose.yml`
 7. **Environment variables** setzen (siehe unten)
 8. **Deploy the stack** – Portainer pullt das vorgebaute Image (`pull_policy: always`), kein Build auf dem Host.
 
@@ -169,8 +150,7 @@ KRAWL_AI_MODEL=gpt-5.1-mini
 
 ```
 hAI.Krawl/
-├── docker-compose.yml        ← Portainer Stack (baut Image aus Upstream-Repo)
-├── docker-compose.ghcr.yml   ← Portainer Stack (holt vorgebauten GHCR-Image)
+├── docker-compose.yml        ← Portainer Stack (holt vorgebauten GHCR-Image)
 ├── .env.example              ← Vorlage für Umgebungsvariablen
 ├── templates/
 │   └── custom_page.html      ← Beispiel-Fake-Seite (nginx-Stil)
@@ -185,8 +165,7 @@ hAI.Krawl/
 
 ## 📝 Upstream
 
-Dieses Repo deployt direkt den Quellcode von [BlessedRebuS/Krawl](https://github.com/BlessedRebuS/Krawl).
-Das Image wird beim ersten Deploy vom Docker-Host gebaut (kein vorgefertigtes Image nötig) – oder alternativ automatisch vom GHCR-Workflow gebaut und auf `ghcr.io/jbkunama1/hai.krawl` gepusht.
+Dieses Repo deployt den Quellcode von [BlessedRebuS/Krawl](https://github.com/BlessedRebuS/Krawl) als vorgebautes GHCR-Image. Das Image wird automatisch vom GHCR-Workflow gebaut und auf `ghcr.io/jbkunama1/hai.krawl` gepusht – Portainer holt nur das fertige Image, kein Build auf dem Host nötig.
 
 Ein **täglicher Workflow** (`docker-build-daily.yml`, täglich 03:30 Uhr UTC + manuell auslösbar) prüft, ob im Upstream ein neuer Commit vorliegt. Ist das Image dafür noch nicht gebaut, läuft ein Neu-Build und Pusht auf `latest` (+ `upstream-<sha>`-Tag).
 
