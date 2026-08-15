@@ -148,7 +148,7 @@ KRAWL_AI_API_KEY=<key-des-LLM>      # manche self-hosted Server ignorieren den K
 KRAWL_AI_MODEL=<dein-modell>
 ```
 
-### Option 3: OpenAI API
+### Option 4: OpenAI API
 
 ```
 KRAWL_AI_ENABLED=true
