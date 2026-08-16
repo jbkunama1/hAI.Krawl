@@ -24,15 +24,14 @@ services:
       # (KRAWL_CUSTOM_TEMPLATE_PATH=/templates/custom_page.html)
 
     environment:
-      # Geheimer Dashboard-Pfad (muss mit / beginnen)
       - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH:-/home/KRAWL}
-          # Passwort für geschützte Dashboard-Panels.
-          # ACHTUNG:
-          # - Wenn nicht gesetzt: Container generiert Passwort (Auto-Gen im Log)
-          # - Leer setzen = Login deaktiviert (nicht machen!)
-          # Beispiel: KRAWL_DASHBOARD_PASSWORD=MeinSicheresPasswort123
-          - KRAWL_DASHBOARD_PASSWORD=${KRAWL_DASHBOARD_PASSWORD}
-          - KRAWL_DELAY=${KRAWL_DELAY:-100}
+# Passwort für geschützte Dashboard-Panels.
+      # ACHTUNG:
+      # - Wenn nicht gesetzt: Container generiert Passwort (Auto-Gen im Log)
+      # - Leer setzen = Login deaktiviert (nicht machen!)
+      # Beispiel: KRAWL_DASHBOARD_PASSWORD=MeinSicheresPasswort123
+      - KRAWL_DASHBOARD_PASSWORD=${KRAWL_DASHBOARD_PASSWORD}
+      - KRAWL_DELAY=${KRAWL_DELAY:-100}
       - KRAWL_CANARY_TOKEN_URL=${KRAWL_CANARY_TOKEN_URL:-}
       # Pfad im Container zu einer eigenen HTML-Fake-Seite. Muss {counter} und {content} enthalten.
       # Leer lassen = Standard-Seite. Nur aktiv, wenn der Ordner per Volume gemountet ist.
